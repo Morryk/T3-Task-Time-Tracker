@@ -1,0 +1,5 @@
+{
+  "name": "Task Time Tracker",
+  "description": "A simple and elegant application to track the time spent on your tasks. Start, pause, and stop timers for different tasks, and view the total time accumulated for each one.",
+  "requestFramePermissions": []
+}
