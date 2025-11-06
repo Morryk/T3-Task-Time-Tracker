@@ -41,13 +41,10 @@ L'interfaccia pulita e intuitiva ti permette di concentrarti su ciò che conta d
 - **TypeScript**: Per un codice più robusto, sicuro e manutenibile.
 - **Vite**: Come build tool e server di sviluppo.
 - **Tailwind CSS**: Per uno styling rapido e personalizzato direttamente nell'HTML.
-- **Nessun Backend**: L'applicazione è interamente client-side, garantendo privacy e velocità.
 
 ## Esecuzione in Locale
 
 Questa applicazione è costruita con React, TypeScript e Vite. Per eseguirla in locale, hai bisogno di Node.js e npm (o un altro package manager come yarn o pnpm) installati sul tuo computer.
-
-Il setup precedente che suggeriva un semplice server statico non era corretto, poiché non poteva compilare il codice TypeScript/JSX. La nuova configurazione con Vite risolve questo problema.
 
 1.  **Clona il Repository**
     ```bash
