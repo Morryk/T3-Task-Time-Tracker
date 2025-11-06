@@ -3,6 +3,7 @@ import { Task, TaskStatus, TimeRecord } from './types';
 import TaskInput from './components/TaskInput';
 import TaskList from './components/TaskList';
 import DailySummary from './components/DailySummary';
+import SessionNameModal from './components/SessionNameModal';
 
 const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>(() => {
@@ -15,6 +16,8 @@ const App: React.FC = () => {
     }
   });
   const [filterQuery, setFilterQuery] = useState('');
+  const [isStopModalOpen, setIsStopModalOpen] = useState(false);
+  const [taskToStopId, setTaskToStopId] = useState<string | null>(null);
 
   useEffect(() => {
     try {
@@ -111,29 +114,45 @@ const App: React.FC = () => {
   };
   
   const handleStopTask = (id: string) => {
-    setTasks(prevTasks =>
-      prevTasks.map(task => {
-        if (task.id === id && task.status !== TaskStatus.Idle) {
-          const lastRecord = task.records[task.records.length - 1];
-          let updatedRecords = task.records;
+    const task = tasks.find(t => t.id === id);
+    if (task && task.status !== TaskStatus.Idle) {
+        setTaskToStopId(id);
+        setIsStopModalOpen(true);
+    }
+  };
 
-          if (lastRecord && lastRecord.endTime === null) {
-            const sessionName = window.prompt("Add a name for this session (optional):");
-            const updatedLastRecord = { 
-              ...lastRecord, 
-              endTime: Date.now(),
-              ...(sessionName && { name: sessionName.trim() })
-            };
-            updatedRecords = [
-              ...task.records.slice(0, -1),
-              updatedLastRecord,
-            ];
-          }
-          return { ...task, status: TaskStatus.Idle, currentTime: 0, records: updatedRecords };
-        }
-        return task;
-      })
+  const handleCloseStopModal = () => {
+    setIsStopModalOpen(false);
+    setTaskToStopId(null);
+  };
+
+  const handleConfirmStopTask = (sessionName: string) => {
+    if (!taskToStopId) return;
+
+    setTasks(prevTasks =>
+        prevTasks.map(task => {
+            if (task.id === taskToStopId) {
+                const lastRecord = task.records[task.records.length - 1];
+                let updatedRecords = task.records;
+
+                if (lastRecord && lastRecord.endTime === null) {
+                    const updatedLastRecord = {
+                        ...lastRecord,
+                        endTime: Date.now(),
+                        ...(sessionName && { name: sessionName }),
+                    };
+                    updatedRecords = [
+                        ...task.records.slice(0, -1),
+                        updatedLastRecord,
+                    ];
+                }
+                return { ...task, status: TaskStatus.Idle, currentTime: 0, records: updatedRecords };
+            }
+            return task;
+        })
     );
+    
+    handleCloseStopModal();
   };
 
   const handleDeleteTask = useCallback((id: string) => {
@@ -199,6 +218,11 @@ const App: React.FC = () => {
           />
         </main>
       </div>
+      <SessionNameModal
+        isOpen={isStopModalOpen}
+        onClose={handleCloseStopModal}
+        onSubmit={handleConfirmStopTask}
+      />
     </div>
   );
 };
