@@ -9,9 +9,10 @@ interface TaskListProps {
   onPause: (id: string) => void;
   onStop: (id: string) => void;
   onDelete: (id: string) => void;
+  onUpdate: (id: string, updates: Partial<Pick<Task, 'name' | 'tags' | 'records'>>) => void;
 }
 
-const TaskList: React.FC<TaskListProps> = ({ tasks, onStart, onPause, onStop, onDelete }) => {
+const TaskList: React.FC<TaskListProps> = ({ tasks, onStart, onPause, onStop, onDelete, onUpdate }) => {
   if (tasks.length === 0) {
     return (
       <div className="text-center py-12 px-6 bg-base-200 rounded-lg">
@@ -31,6 +32,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onStart, onPause, onStop, on
           onPause={onPause}
           onStop={onStop}
           onDelete={onDelete}
+          onUpdate={onUpdate}
         />
       ))}
     </div>

@@ -170,6 +170,14 @@ const App: React.FC = () => {
       return prevTasks.filter(task => task.id !== id);
     });
   }, []);
+  
+  const handleUpdateTask = (id: string, updates: Partial<Pick<Task, 'name' | 'tags' | 'records'>>) => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === id ? { ...task, ...updates } : task
+      )
+    );
+  };
 
   const filteredTasks = useMemo(() => {
     const lowerCaseQuery = filterQuery.toLowerCase();
@@ -215,6 +223,7 @@ const App: React.FC = () => {
             onPause={handlePauseTask}
             onStop={handleStopTask}
             onDelete={handleDeleteTask}
+            onUpdate={handleUpdateTask}
           />
         </main>
       </div>
