@@ -65,4 +65,4 @@ Questa applicazione è costruita con React, TypeScript e Vite. Per eseguirla in 
     ```
 
 4.  **Apri nel Browser**
-    Vite ti mostrerà un URL nel terminale (solitamente `http://localhost:5173`). Apri questo indirizzo nel tuo browser per vedere l'applicazione in esecuzione. Il server si ricaricherà automaticamente ogni volta che modifichi un file sorgente.
+    Vite ti mostrerà un URL nel terminale (solitamente `http://localhost:5173`). Apri questo indirizzo nel tuo browser per vedere l'applicazione in esecuzione.
