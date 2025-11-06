@@ -51,7 +51,7 @@ Il setup precedente che suggeriva un semplice server statico non era corretto, p
 
 1.  **Clona il Repository**
     ```bash
-    git clone https://github.com/tuo-username/t3-task-time-tracker.git
+    git clone https://github.com/Morryk/t3-task-time-tracker.git
     cd t3-task-time-tracker
     ```
 
