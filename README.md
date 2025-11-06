@@ -49,3 +49,42 @@ L'interfaccia pulita e intuitiva ti permette di concentrarti su ciò che conta d
 3.  **Gestisci il Timer**: Usa i pulsanti ⏸️ (pausa) e ⏹️ (stop) per controllare il tracciamento.
 4.  **Visualizza la Cronologia**: Clicca sulla freccia vicino al nome del task per espandere e vedere le sessioni passate.
 5.  **Filtra i Task**: Usa la barra di ricerca e i pulsanti di stato per trovare facilmente ciò che cerchi.
+
+## Esecuzione in Locale
+
+Dato che l'applicazione utilizza i moduli JavaScript (ES Modules) direttamente nel browser, non puoi semplicemente aprire il file `index.html` dal tuo file system. Hai bisogno di un server web locale per servire i file correttamente.
+
+Ecco alcuni modi semplici per avviare un server locale:
+
+1.  **Clona il Repository**
+    ```bash
+    git clone https://github.com/tuo-username/t3-task-time-tracker.git
+    cd t3-task-time-tracker
+    ```
+
+2.  **Avvia un Server Web**
+
+    *   **Opzione 1: Con Node.js**
+        Se hai Node.js installato, puoi usare il pacchetto `serve`. Esegui questo comando nella cartella del progetto:
+        ```bash
+        npx serve
+        ```
+        L'applicazione sarà disponibile all'indirizzo indicato nel terminale (solitamente `http://localhost:3000`).
+
+    *   **Opzione 2: Con Python**
+        Se hai Python installato, puoi usare il suo server HTTP integrato.
+        - Per Python 3:
+          ```bash
+          python3 -m http.server
+          ```
+        - Per Python 2:
+          ```bash
+          python -m SimpleHTTPServer
+          ```
+        L'applicazione sarà disponibile su `http://localhost:8000`.
+
+    *   **Opzione 3: Con l'estensione "Live Server" di VS Code**
+        Se usi Visual Studio Code, puoi installare l'estensione [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer). Una volta installata, clicca con il tasto destro sul file `index.html` e seleziona "Open with Live Server".
+
+3.  **Apri nel Browser**
+    Apri il tuo browser e naviga all'URL fornito dal server locale (es. `http://localhost:3000` o `http://localhost:8000`).
