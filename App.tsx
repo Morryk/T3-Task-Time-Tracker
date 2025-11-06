@@ -4,6 +4,7 @@ import TaskInput from './components/TaskInput';
 import TaskList from './components/TaskList';
 import DailySummary from './components/DailySummary';
 import SessionNameModal from './components/SessionNameModal';
+import StatusFilter from './components/StatusFilter';
 
 const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>(() => {
@@ -16,6 +17,7 @@ const App: React.FC = () => {
     }
   });
   const [filterQuery, setFilterQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<TaskStatus | 'All'>('All');
   const [isStopModalOpen, setIsStopModalOpen] = useState(false);
   const [taskToStopId, setTaskToStopId] = useState<string | null>(null);
 
@@ -181,15 +183,20 @@ const App: React.FC = () => {
 
   const filteredTasks = useMemo(() => {
     const lowerCaseQuery = filterQuery.toLowerCase();
-    if (!lowerCaseQuery) {
-      return tasks;
-    }
+    
     return tasks.filter(task => {
+      // Status filter first for potentially better performance
+      const statusMatch = statusFilter === 'All' || task.status === statusFilter;
+      if (!statusMatch) return false;
+
+      // Then, text filter
+      if (!lowerCaseQuery) return true; // No text query, so it passes
+      
       const nameMatch = task.name.toLowerCase().includes(lowerCaseQuery);
       const tagMatch = task.tags.some(tag => tag.toLowerCase().includes(lowerCaseQuery));
       return nameMatch || tagMatch;
     });
-  }, [tasks, filterQuery]);
+  }, [tasks, filterQuery, statusFilter]);
 
 
   return (
@@ -206,14 +213,20 @@ const App: React.FC = () => {
           <DailySummary summaries={dailySummaries} />
           <TaskInput onAddTask={handleAddTask} />
           
-          <div className="mb-4">
-            <input
-              type="text"
-              value={filterQuery}
-              onChange={(e) => setFilterQuery(e.target.value)}
-              placeholder="Filter by task name or tag..."
-              className="w-full bg-base-200 border border-base-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-shadow"
-              aria-label="Filter tasks"
+          <div className="mb-4 bg-base-200 p-3 rounded-lg flex flex-col sm:flex-row gap-3 items-center shadow">
+            <div className="relative w-full sm:flex-grow">
+              <input
+                type="text"
+                value={filterQuery}
+                onChange={(e) => setFilterQuery(e.target.value)}
+                placeholder="Filter by name or tag..."
+                className="w-full bg-base-100 border border-base-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-shadow"
+                aria-label="Filter tasks by name or tag"
+              />
+            </div>
+            <StatusFilter
+                currentFilter={statusFilter}
+                onFilterChange={setStatusFilter}
             />
           </div>
 
