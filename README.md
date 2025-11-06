@@ -39,22 +39,15 @@ L'interfaccia pulita e intuitiva ti permette di concentrarti su ciò che conta d
 
 - **React**: Per la costruzione di un'interfaccia utente reattiva e modulare.
 - **TypeScript**: Per un codice più robusto, sicuro e manutenibile.
+- **Vite**: Come build tool e server di sviluppo.
 - **Tailwind CSS**: Per uno styling rapido e personalizzato direttamente nell'HTML.
 - **Nessun Backend**: L'applicazione è interamente client-side, garantendo privacy e velocità.
 
-## Come Utilizzare
-
-1.  **Aggiungi un Task**: Scrivi il nome del task nel campo di testo principale e premi "Add Task".
-2.  **Inizia a Tracciare**: Clicca sull'icona ▶️ (play) per avviare il timer.
-3.  **Gestisci il Timer**: Usa i pulsanti ⏸️ (pausa) e ⏹️ (stop) per controllare il tracciamento.
-4.  **Visualizza la Cronologia**: Clicca sulla freccia vicino al nome del task per espandere e vedere le sessioni passate.
-5.  **Filtra i Task**: Usa la barra di ricerca e i pulsanti di stato per trovare facilmente ciò che cerchi.
-
 ## Esecuzione in Locale
 
-Dato che l'applicazione utilizza i moduli JavaScript (ES Modules) direttamente nel browser, non puoi semplicemente aprire il file `index.html` dal tuo file system. Hai bisogno di un server web locale per servire i file correttamente.
+Questa applicazione è costruita con React, TypeScript e Vite. Per eseguirla in locale, hai bisogno di Node.js e npm (o un altro package manager come yarn o pnpm) installati sul tuo computer.
 
-Ecco alcuni modi semplici per avviare un server locale:
+Il setup precedente che suggeriva un semplice server statico non era corretto, poiché non poteva compilare il codice TypeScript/JSX. La nuova configurazione con Vite risolve questo problema.
 
 1.  **Clona il Repository**
     ```bash
@@ -62,29 +55,17 @@ Ecco alcuni modi semplici per avviare un server locale:
     cd t3-task-time-tracker
     ```
 
-2.  **Avvia un Server Web**
+2.  **Installa le Dipendenze**
+    Esegui questo comando nella cartella principale del progetto per installare React, Vite e tutte le altre dipendenze necessarie.
+    ```bash
+    npm install
+    ```
 
-    *   **Opzione 1: Con Node.js**
-        Se hai Node.js installato, puoi usare il pacchetto `serve`. Esegui questo comando nella cartella del progetto:
-        ```bash
-        npx serve
-        ```
-        L'applicazione sarà disponibile all'indirizzo indicato nel terminale (solitamente `http://localhost:3000`).
+3.  **Avvia il Server di Sviluppo**
+    Una volta completata l'installazione, avvia il server di sviluppo di Vite:
+    ```bash
+    npm run dev
+    ```
 
-    *   **Opzione 2: Con Python**
-        Se hai Python installato, puoi usare il suo server HTTP integrato.
-        - Per Python 3:
-          ```bash
-          python3 -m http.server
-          ```
-        - Per Python 2:
-          ```bash
-          python -m SimpleHTTPServer
-          ```
-        L'applicazione sarà disponibile su `http://localhost:8000`.
-
-    *   **Opzione 3: Con l'estensione "Live Server" di VS Code**
-        Se usi Visual Studio Code, puoi installare l'estensione [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer). Una volta installata, clicca con il tasto destro sul file `index.html` e seleziona "Open with Live Server".
-
-3.  **Apri nel Browser**
-    Apri il tuo browser e naviga all'URL fornito dal server locale (es. `http://localhost:3000` o `http://localhost:8000`).
+4.  **Apri nel Browser**
+    Vite ti mostrerà un URL nel terminale (solitamente `http://localhost:5173`). Apri questo indirizzo nel tuo browser per vedere l'applicazione in esecuzione. Il server si ricaricherà automaticamente ogni volta che modifichi un file sorgente.
