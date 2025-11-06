@@ -48,26 +48,17 @@ const App: React.FC = () => {
 
     tasks.forEach(task => {
       task.records.forEach(record => {
-        if (!record.startTime) return;
+        if (!record.startTime || !record.endTime) return;
 
-        let cursor = record.startTime;
-        const endTime = record.endTime ?? Date.now();
-
-        while (cursor < endTime) {
-          const startOfCursorDay = new Date(cursor);
-          startOfCursorDay.setUTCHours(0, 0, 0, 0);
-          const dayString = startOfCursorDay.toISOString().split('T')[0];
-
-          const endOfCursorDay = new Date(startOfCursorDay);
-          endOfCursorDay.setUTCDate(startOfCursorDay.getUTCDate() + 1);
-          
-          const segmentEnd = Math.min(endTime, endOfCursorDay.getTime());
-          const durationInMs = segmentEnd - cursor;
-
-          totalsByDay[dayString] = (totalsByDay[dayString] || 0) + durationInMs;
-          
-          cursor = endOfCursorDay.getTime();
-        }
+        // Use stored duration if available, otherwise calculate from start/end
+        const recordDurationMs = (record.duration !== undefined) 
+          ? record.duration * 1000
+          : record.endTime - record.startTime;
+        
+        const startOfCursorDay = new Date(record.startTime);
+        startOfCursorDay.setUTCHours(0, 0, 0, 0);
+        const dayString = startOfCursorDay.toISOString().split('T')[0];
+        totalsByDay[dayString] = (totalsByDay[dayString] || 0) + recordDurationMs;
       });
     });
 
@@ -138,9 +129,10 @@ const App: React.FC = () => {
                 let updatedRecords = task.records;
 
                 if (lastRecord && lastRecord.endTime === null) {
-                    const updatedLastRecord = {
+                    const updatedLastRecord: TimeRecord = {
                         ...lastRecord,
                         endTime: Date.now(),
+                        duration: Math.round(task.currentTime), // Save the accurate duration in seconds
                         ...(sessionName && { name: sessionName }),
                     };
                     updatedRecords = [
@@ -206,7 +198,7 @@ const App: React.FC = () => {
           <h1 className="text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-teal-300">
             Task Time Tracker
           </h1>
-          <p className="text-text-secondary mt-2">Focus on what matters. We'll handle the time.</p>
+          <p className="text-text-secondary mt-2">Concentrati su ciò che conta. Al tempo pensiamo noi.</p>
         </header>
 
         <main>
@@ -219,9 +211,9 @@ const App: React.FC = () => {
                 type="text"
                 value={filterQuery}
                 onChange={(e) => setFilterQuery(e.target.value)}
-                placeholder="Filter by name or tag..."
+                placeholder="Filtra per nome o tag..."
                 className="w-full bg-base-100 border border-base-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-shadow"
-                aria-label="Filter tasks by name or tag"
+                aria-label="Filtra tasks per nome o tag"
               />
             </div>
             <StatusFilter

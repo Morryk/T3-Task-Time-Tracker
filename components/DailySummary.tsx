@@ -10,7 +10,7 @@ const DailySummary: React.FC<DailySummaryProps> = ({ summaries }) => {
   if (summaries.length === 0) {
     return (
       <div className="bg-base-200 p-4 rounded-lg shadow mb-8 text-center">
-        <p className="text-text-secondary text-sm">Track your first task to see daily summaries here.</p>
+        <p className="text-text-secondary text-sm">Traccia il tuo primo task per vedere qui i riepiloghi giornalieri.</p>
       </div>
     );
   }
@@ -19,7 +19,7 @@ const DailySummary: React.FC<DailySummaryProps> = ({ summaries }) => {
     <div className="bg-base-200 rounded-lg shadow mb-8">
       <details open className="group">
         <summary className="p-4 flex justify-between items-center cursor-pointer list-none">
-          <h2 className="text-lg font-semibold text-text-primary">Daily Summaries</h2>
+          <h2 className="text-lg font-semibold text-text-primary">Riepiloghi Giornalieri</h2>
           <Icon name="chevron-down" className="w-5 h-5 text-text-secondary transition-transform transform group-open:rotate-180" />
         </summary>
         <div className="border-t border-base-300 px-4 pb-4 pt-2">

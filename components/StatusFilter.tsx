@@ -9,10 +9,10 @@ interface StatusFilterProps {
 }
 
 const filters: { label: string; value: FilterType }[] = [
-  { label: 'All', value: 'All' },
-  { label: 'Running', value: TaskStatus.Running },
-  { label: 'Paused', value: TaskStatus.Paused },
-  { label: 'Stopped', value: TaskStatus.Idle },
+  { label: 'Tutti', value: 'All' },
+  { label: 'In Corso', value: TaskStatus.Running },
+  { label: 'In Pausa', value: TaskStatus.Paused },
+  { label: 'Fermati', value: TaskStatus.Idle },
 ];
 
 const StatusFilter: React.FC<StatusFilterProps> = ({ currentFilter, onFilterChange }) => {

@@ -25,24 +25,24 @@ const TaskInput: React.FC<TaskInputProps> = ({ onAddTask }) => {
           type="text"
           value={taskName}
           onChange={(e) => setTaskName(e.target.value)}
-          placeholder="What are you working on?"
+          placeholder="Su cosa stai lavorando?"
           className="flex-grow bg-base-100 border border-base-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-shadow"
-          aria-label="Task name"
+          aria-label="Nome task"
         />
          <input
           type="text"
           value={taskTags}
           onChange={(e) => setTaskTags(e.target.value)}
-          placeholder="Add tags, comma separated"
+          placeholder="Aggiungi tag, separati da virgola"
           className="flex-grow bg-base-100 border border-base-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand-primary transition-shadow"
-          aria-label="Task tags"
+          aria-label="Tag task"
         />
         <button
           type="submit"
           className="bg-brand-primary hover:bg-brand-secondary text-white font-bold py-2 px-6 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={!taskName.trim()}
         >
-          Add Task
+          Aggiungi Task
         </button>
       </div>
     </form>

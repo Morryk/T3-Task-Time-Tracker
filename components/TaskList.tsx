@@ -16,8 +16,8 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onStart, onPause, onStop, on
   if (tasks.length === 0) {
     return (
       <div className="text-center py-12 px-6 bg-base-200 rounded-lg">
-        <h3 className="text-xl font-semibold text-text-secondary">No tasks yet.</h3>
-        <p className="text-text-secondary mt-2">Add a new task above to start tracking your time!</p>
+        <h3 className="text-xl font-semibold text-text-secondary">Nessun task ancora.</h3>
+        <p className="text-text-secondary mt-2">Aggiungi un nuovo task qui sopra per iniziare a tracciare il tuo tempo!</p>
       </div>
     );
   }

@@ -8,6 +8,7 @@ export interface TimeRecord {
   startTime: number;
   endTime: number | null;
   name?: string;
+  duration?: number; // in seconds
 }
 
 export interface Task {

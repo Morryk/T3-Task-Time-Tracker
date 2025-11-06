@@ -27,9 +27,12 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onStart, onPause, onStop, onD
   const calculateTotalTime = (): number => {
     const completedTime = task.records
       .filter(r => r.endTime)
-      .reduce((acc, r) => acc + (r.endTime! - r.startTime), 0);
+      .reduce((acc, r) => {
+        const durationInSeconds = r.duration ?? (r.endTime! - r.startTime) / 1000;
+        return acc + durationInSeconds;
+      }, 0);
     
-    return (completedTime / 1000) + task.currentTime;
+    return completedTime + task.currentTime;
   };
   
   const totalTime = calculateTotalTime();
@@ -104,7 +107,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onStart, onPause, onStop, onD
                   value={editedName}
                   onChange={(e) => setEditedName(e.target.value)}
                   className="bg-base-100 border border-base-300 rounded-md px-3 py-1 text-lg font-semibold w-full focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                  aria-label="Edit Task name"
+                  aria-label="Modifica nome task"
                   autoFocus
                 />
                 <input
@@ -112,8 +115,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onStart, onPause, onStop, onD
                   value={editedTags}
                   onChange={(e) => setEditedTags(e.target.value)}
                   className="bg-base-100 border border-base-300 rounded-md px-3 py-1 text-sm w-full focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                  aria-label="Edit Task tags"
-                  placeholder="Add tags, comma separated"
+                  aria-label="Modifica tag task"
+                  placeholder="Aggiungi tag, separati da virgola"
                 />
               </div>
             ) : (
@@ -123,7 +126,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onStart, onPause, onStop, onD
                    <button
                       onClick={handleEditTask}
                       className="p-1 rounded-full text-text-secondary hover:bg-base-300 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-                      title="Edit Task"
+                      title="Modifica Task"
                       disabled={task.status !== TaskStatus.Idle}
                     >
                       <Icon name="pencil" className="w-4 h-4" />
@@ -155,14 +158,14 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onStart, onPause, onStop, onD
               <button
                 onClick={handleSaveTask}
                 className="p-2 rounded-full bg-base-300 hover:bg-green-500 text-green-400 hover:text-white transition-colors"
-                title="Save"
+                title="Salva"
               >
                 <Icon name="check" className="w-5 h-5" />
               </button>
               <button
                 onClick={handleCancelEditTask}
                 className="p-2 rounded-full bg-base-300 hover:bg-red-500 text-red-400 hover:text-white transition-colors"
-                title="Cancel"
+                title="Annulla"
               >
                 <Icon name="x-mark" className="w-5 h-5" />
               </button>
@@ -185,7 +188,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onStart, onPause, onStop, onD
                   <button
                     onClick={(e) => { e.stopPropagation(); onPause(task.id); }}
                     className="p-2 rounded-full bg-base-300 hover:bg-yellow-500 text-yellow-400 hover:text-white transition-colors"
-                    title="Pause"
+                    title="Pausa"
                   >
                     <Icon name="pause" className="w-5 h-5" />
                   </button>
@@ -193,7 +196,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onStart, onPause, onStop, onD
                   <button
                     onClick={(e) => { e.stopPropagation(); onStart(task.id); }}
                     className="p-2 rounded-full bg-base-300 hover:bg-green-500 text-green-400 hover:text-white transition-colors"
-                    title="Start"
+                    title="Avvia"
                   >
                     <Icon name="play" className="w-5 h-5" />
                   </button>
@@ -203,7 +206,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onStart, onPause, onStop, onD
                   onClick={(e) => { e.stopPropagation(); onStop(task.id); }}
                   disabled={task.status === TaskStatus.Idle}
                   className="p-2 rounded-full bg-base-300 hover:bg-red-500 text-red-400 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  title="Stop"
+                  title="Ferma"
                 >
                   <Icon name="stop" className="w-5 h-5" />
                 </button>
@@ -211,7 +214,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onStart, onPause, onStop, onD
               <button
                   onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
                   className="p-2 rounded-full bg-base-300 hover:bg-gray-500 text-gray-400 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  title="Delete"
+                  title="Elimina"
                   disabled={task.status !== TaskStatus.Idle}
               >
                   <Icon name="trash" className="w-5 h-5" />
@@ -223,14 +226,15 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onStart, onPause, onStop, onD
       {isOpen && completedSessions.length > 0 && (
         <div className="border-t border-base-300 px-4 py-3 bg-base-100/50">
            <div className="grid grid-cols-4 gap-4 text-xs font-bold text-text-secondary mb-2 px-2">
-                <span>DATA</span>
+                <span>SESSIONE</span>
                 <span className="text-center">INIZIO</span>
                 <span className="text-center">FINE</span>
                 <span className="text-right">DURATA</span>
             </div>
           <ul className="space-y-1">
-            {completedSessions.map((record, index) => {
+            {completedSessions.slice().reverse().map((record, index) => {
               const isEditingRecord = editingRecordIndex === index;
+              const recordDuration = record.duration ?? (record.endTime! - record.startTime) / 1000;
               return (
                 <li key={index} className="grid grid-cols-4 gap-4 items-center text-sm text-text-primary bg-base-200/50 p-2 rounded">
                   <div>
@@ -241,7 +245,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onStart, onPause, onStop, onD
                           value={editedRecordName}
                           onChange={(e) => setEditedRecordName(e.target.value)}
                           className="bg-base-100 border border-base-300 rounded-md px-2 py-0.5 text-sm w-full focus:outline-none focus:ring-1 focus:ring-brand-primary"
-                          aria-label="Edit Session Name"
+                          aria-label="Modifica Nome Sessione"
                           autoFocus
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') handleSaveRecord(index);
@@ -254,18 +258,20 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onStart, onPause, onStop, onD
                     ): (
                       <>
                         <div className="flex items-center gap-1.5 group">
-                          {record.name && <span className="font-semibold text-sm text-text-primary block">{record.name}</span>}
+                          <div className="flex flex-col">
+                            {record.name && <span className="font-semibold text-sm text-text-primary block">{record.name}</span>}
+                            <span className={`text-xs ${record.name ? 'text-text-secondary' : 'text-text-primary'}`}>{formatDate(record.startTime)}</span>
+                          </div>
                           <button onClick={() => handleEditRecord(index, record.name)} className="p-1 rounded text-text-secondary opacity-0 group-hover:opacity-100 focus:opacity-100 hover:bg-base-300 hover:text-white transition-opacity">
                             <Icon name="pencil" className="w-3 h-3" />
                           </button>
                         </div>
-                        <span className={`text-xs ${record.name ? 'text-text-secondary' : 'text-text-primary'}`}>{formatDate(record.startTime)}</span>
                       </>
                     )}
                   </div>
                   <span className="text-center">{formatTimeOfDay(record.startTime)}</span>
                   <span className="text-center">{formatTimeOfDay(record.endTime!)}</span>
-                  <span className="font-mono text-right">{formatTime((record.endTime! - record.startTime) / 1000)}</span>
+                  <span className="font-mono text-right">{formatTime(recordDuration)}</span>
                 </li>
               );
             })}
