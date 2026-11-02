@@ -1,0 +1,66 @@
+﻿name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Sync dist into server
+        run: rm -rf server/dist && cp -r dist server/dist
+
+      - name: Setup Go module
+        working-directory: server
+        run: |
+          [ -f go.mod ] || go mod init t3-tracker
+          go mod tidy
+
+      - name: Build Windows binary
+        working-directory: server
+        run: |
+          GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags="-s -w" -o ../t3-windows.exe .
+
+      - name: Build Linux binary
+        working-directory: server
+        run: |
+          GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags="-s -w" -o ../t3-linux .
+
+      - name: Generate checksums
+        run: |
+          sha256sum t3-windows.exe t3-linux > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            t3-windows.exe
+            t3-linux
+            SHA256SUMS
+          generate_release_notes: true
